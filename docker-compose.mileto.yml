@@ -1,0 +1,120 @@
+# Docker Compose para testing local de Mileto
+# Uso: docker-compose -f docker-compose.mileto.yml up
+
+version: '3'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: chatwoot
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    command: redis-server
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+
+  rails:
+    # Cambia 'tu-usuario' por tu usuario de Docker Hub
+    image: tu-usuario/mileto-chatwoot:latest
+    # O usa la imagen local si aún no la subiste:
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile.mileto
+    restart: always
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - RAILS_ENV=production
+      - INSTALLATION_ENV=docker
+
+      # Database
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DATABASE=chatwoot
+
+      # Redis
+      - REDIS_URL=redis://redis:6379
+
+      # Application
+      - SECRET_KEY_BASE=replace_with_lengthy_secure_hex
+      - FRONTEND_URL=http://localhost:3000
+
+      # Opcional: Configuración de email
+      # - MAILER_SENDER_EMAIL=noreply@mileto.com
+      # - SMTP_ADDRESS=smtp.gmail.com
+      # - SMTP_PORT=587
+      # - SMTP_USERNAME=your-email@gmail.com
+      # - SMTP_PASSWORD=your-password
+
+      # Activar cuenta signup (opcional)
+      - ENABLE_ACCOUNT_SIGNUP=false
+
+    entrypoint: docker/entrypoints/rails.sh
+    command: ['bundle', 'exec', 'rails', 's', '-p', '3000', '-b', '0.0.0.0']
+    volumes:
+      - storage_data:/app/storage
+
+  sidekiq:
+    image: tu-usuario/mileto-chatwoot:latest
+    # O usa la imagen local:
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile.mileto
+    restart: always
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - NODE_ENV=production
+      - RAILS_ENV=production
+      - INSTALLATION_ENV=docker
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DATABASE=chatwoot
+      - REDIS_URL=redis://redis:6379
+      - SECRET_KEY_BASE=replace_with_lengthy_secure_hex
+    command: ['bundle', 'exec', 'sidekiq', '-C', 'config/sidekiq.yml']
+
+volumes:
+  postgres_data:
+  redis_data:
+  storage_data:
+
+# Instrucciones de uso:
+#
+# 1. Genera un SECRET_KEY_BASE:
+#    openssl rand -hex 64
+#
+# 2. Reemplaza 'replace_with_lengthy_secure_hex' arriba con el valor generado
+#
+# 3. Cambia 'tu-usuario/mileto-chatwoot:latest' por tu imagen real
+#
+# 4. Inicia los servicios:
+#    docker-compose -f docker-compose.mileto.yml up -d
+#
+# 5. Crea la base de datos (solo primera vez):
+#    docker-compose -f docker-compose.mileto.yml exec rails bundle exec rails db:create
+#    docker-compose -f docker-compose.mileto.yml exec rails bundle exec rails db:migrate
+#
+# 6. Accede a http://localhost:3000
+#
+# 7. Para detener:
+#    docker-compose -f docker-compose.mileto.yml down

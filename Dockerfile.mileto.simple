@@ -1,0 +1,41 @@
+# Dockerfile personalizado para Mileto - SOLO TRADUCCIONES
+# Esta versión NO requiere recompilación y funciona inmediatamente
+
+FROM chatwoot/chatwoot:latest
+
+# Metadata
+LABEL maintainer="Mileto"
+LABEL description="Mileto - Customized Chatwoot (Translations Only)"
+
+# Cambiar al usuario root para hacer modificaciones
+USER root
+
+# Copiar archivos de traducción personalizados (español e inglés)
+COPY app/javascript/dashboard/i18n/locale/es/login.json /app/app/javascript/dashboard/i18n/locale/es/login.json
+COPY app/javascript/dashboard/i18n/locale/es/generalSettings.json /app/app/javascript/dashboard/i18n/locale/es/generalSettings.json
+COPY app/javascript/dashboard/i18n/locale/es/settings.json /app/app/javascript/dashboard/i18n/locale/es/settings.json
+COPY app/javascript/dashboard/i18n/locale/es/helpCenter.json /app/app/javascript/dashboard/i18n/locale/es/helpCenter.json
+COPY app/javascript/dashboard/i18n/locale/es/resetPassword.json /app/app/javascript/dashboard/i18n/locale/es/resetPassword.json
+COPY app/javascript/dashboard/i18n/locale/es/mfa.json /app/app/javascript/dashboard/i18n/locale/es/mfa.json
+COPY app/javascript/dashboard/i18n/locale/es/integrations.json /app/app/javascript/dashboard/i18n/locale/es/integrations.json
+COPY app/javascript/dashboard/i18n/locale/es/inboxMgmt.json /app/app/javascript/dashboard/i18n/locale/es/inboxMgmt.json
+
+COPY app/javascript/dashboard/i18n/locale/en/login.json /app/app/javascript/dashboard/i18n/locale/en/login.json
+COPY app/javascript/dashboard/i18n/locale/en/generalSettings.json /app/app/javascript/dashboard/i18n/locale/en/generalSettings.json
+COPY app/javascript/dashboard/i18n/locale/en/settings.json /app/app/javascript/dashboard/i18n/locale/en/settings.json
+COPY app/javascript/dashboard/i18n/locale/en/helpCenter.json /app/app/javascript/dashboard/i18n/locale/en/helpCenter.json
+COPY app/javascript/dashboard/i18n/locale/en/resetPassword.json /app/app/javascript/dashboard/i18n/locale/en/resetPassword.json
+COPY app/javascript/dashboard/i18n/locale/en/mfa.json /app/app/javascript/dashboard/i18n/locale/en/mfa.json
+
+# Widget y Survey
+COPY app/javascript/widget/i18n/locale/es.json /app/app/javascript/widget/i18n/locale/es.json
+COPY app/javascript/widget/i18n/locale/en.json /app/app/javascript/widget/i18n/locale/en.json
+COPY app/javascript/survey/i18n/locale/es.json /app/app/javascript/survey/i18n/locale/es.json
+
+# Copiar migración de branding
+COPY db/migrate/20251123131512_update_branding_to_mileto.rb /app/db/migrate/20251123131512_update_branding_to_mileto.rb
+
+# Volver al usuario de la aplicación
+USER chatwoot
+
+# El entrypoint y CMD se heredan de la imagen base

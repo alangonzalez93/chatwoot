@@ -107,6 +107,12 @@ Rails.application.routes.draw do
           end
           resources :campaigns, only: [:index, :create, :show, :update, :destroy]
           resources :dashboard_apps, only: [:index, :show, :create, :update, :destroy]
+          resource :mileto_bot, only: [], controller: 'mileto_bot' do
+            collection do
+              get :status
+              put :toggle
+            end
+          end
           namespace :channels do
             resource :twilio_channel, only: [:create]
           end

@@ -211,7 +211,8 @@ export const colors = {
     },
 
     black: '#000000',
-    brand: '#2781F6',
+    brand: '#1E6FFF', // Azul Mileto (color principal del gradiente)
+    'brand-secondary': '#8B5CF6', // Morado Mileto (color secundario del gradiente)
     background: 'rgb(var(--background-color) / <alpha-value>)',
     solid: {
       1: 'rgb(var(--solid-1) / <alpha-value>)',

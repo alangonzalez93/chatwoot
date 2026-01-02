@@ -1,0 +1,28 @@
+{
+  "MILETO_BOT": {
+    "HEADER": "Mileto Bot",
+    "DESCRIPTION": "Gestiona el bot de Mileto para tu cuenta. Activa o desactiva el bot según tus necesidades.",
+    "BOT_STATUS": "Estado del Bot",
+    "BOT_DESCRIPTION": "El bot de Mileto procesa conversaciones automáticamente usando inteligencia artificial. Cuando está activo, responderá a mensajes según la configuración establecida.",
+    "STATUS": {
+      "ACTIVE": "Activo",
+      "INACTIVE": "Inactivo"
+    },
+    "UPDATING": "Actualizando...",
+    "INFO": {
+      "TITLE": "Información",
+      "MESSAGE": "Los cambios en el estado del bot se aplicarán inmediatamente. El bot activo procesará conversaciones automáticamente en los inboxes configurados."
+    },
+    "API": {
+      "SUCCESS": {
+        "ACTIVATED": "Bot activado correctamente",
+        "DEACTIVATED": "Bot desactivado correctamente"
+      },
+      "ERROR": {
+        "FETCH": "Error al cargar el estado del bot. Por favor, intenta nuevamente.",
+        "UPDATE": "Error al actualizar el bot. Por favor, intenta nuevamente.",
+        "PERMISSION": "No tienes permisos para gestionar el bot. Solo los administradores pueden realizar esta acción."
+      }
+    }
+  }
+}

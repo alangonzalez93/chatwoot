@@ -579,6 +579,13 @@ const menuItems = computed(() => {
         },
       ],
     },
+    {
+      name: 'Mileto Bot',
+      label: t('SIDEBAR.MILETO_BOT'),
+      icon: 'i-lucide-bot',
+      to: accountScopedRoute('miletobot_index'),
+      activeOn: ['miletobot_wrapper', 'miletobot_index'],
+    },
   ];
 });
 </script>

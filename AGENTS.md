@@ -161,36 +161,65 @@ end
 
 **✅ PATRÓN CORRECTO:**
 
-Agregar dentro del bloque `namespace :api do namespace :v1 do resources :accounts do`:
+**HAY DOS PATRONES VÁLIDOS - elegir según el caso:**
+
+#### Patrón A: Endpoints RESTful estándar (RECOMENDADO para CRUD)
+Usar cuando tenés acciones estándar como `index`, `show`, `create`, `update`, `destroy`:
+
+```ruby
+resources :example, only: [:index, :show, :create, :update]
+```
+
+Genera:
+- `GET /api/v1/accounts/:account_id/example` → `example#index`
+- `GET /api/v1/accounts/:account_id/example/:id` → `example#show`
+- `POST /api/v1/accounts/:account_id/example` → `example#create`
+- `PUT /api/v1/accounts/:account_id/example/:id` → `example#update`
+
+#### Patrón B: Endpoints custom (para acciones no-RESTful)
+Usar cuando tenés acciones custom como `status`, `toggle`, `sync`:
 
 ```ruby
 resource :example, only: [], controller: 'example' do
   collection do
-    get :index
-    post :create
-    put :update
+    get :status
+    put :toggle
   end
 end
 ```
 
+Genera:
+- `GET /api/v1/accounts/:account_id/example/status` → `example#status`
+- `PUT /api/v1/accounts/:account_id/example/toggle` → `example#toggle`
+
 **Ubicación:** Después de `resources :dashboard_apps` (línea ~109-115)
 
-**❌ ERROR COMÚN:**
+**❌ ERROR COMÚN #1:**
 ```ruby
-# NO HACER ESTO - no sigue el patrón de Chatwoot
-get 'example/index', to: 'example#index'
-put 'example/update', to: 'example#update'
+# NO HACER ESTO - mezclar patrones causa 404
+resource :example, only: [], controller: 'example' do
+  collection do
+    get :index  # ← INCORRECTO: index es acción RESTful, usar resources
+  end
+end
 ```
 
-**Por qué:**
-- No usa el patrón `resource` singular que es estándar en Chatwoot
-- Rails puede no resolver correctamente el controller
-- No es consistente con el resto de la codebase
+**❌ ERROR COMÚN #2:**
+```ruby
+# NO HACER ESTO - no sigue ningún patrón
+get 'example/index', to: 'example#index'
+```
 
-**Verificar que genera las rutas correctas:**
-- `GET /api/v1/accounts/:account_id/example/index`
-- `POST /api/v1/accounts/:account_id/example/create`
-- `PUT /api/v1/accounts/:account_id/example/update`
+**❌ ERROR COMÚN #3:**
+```ruby
+# NUNCA hardcodear API keys en el código
+request['X-API-Key'] = ENV.fetch('API_KEY', 'hardcoded-key-here')  # ← MAL
+
+# CORRECTO: validar que exista
+api_key = ENV['API_KEY']
+raise 'API_KEY environment variable is not configured' if api_key.blank?
+request['X-API-Key'] = api_key
+```
 
 ---
 
@@ -439,6 +468,112 @@ this.enabled = response.data?.botEnabled || false;
 
 **Por qué:** Si los nombres de campos no coinciden, siempre obtendrás el valor default y el feature no funcionará.
 
+### 4. Paneles/Modals Slide-in (IMPORTANTE)
+
+Si tu sección incluye un panel lateral que se abre/cierra (como detalles de un item), **SIEMPRE usar el patrón con `<Transition>` component**.
+
+**✅ PATRÓN CORRECTO para Panel Slide-in:**
+
+```vue
+<template>
+  <Transition
+    enter-active-class="transition-transform duration-300 ease-in-out"
+    enter-from-class="ltr:translate-x-full rtl:-translate-x-full"
+    enter-to-class="ltr:translate-x-0 rtl:-translate-x-0"
+    leave-active-class="transition-transform duration-300 ease-in-out"
+    leave-from-class="ltr:translate-x-0 rtl:-translate-x-0"
+    leave-to-class="ltr:translate-x-full rtl:-translate-x-full"
+  >
+    <div
+      v-if="isOpen"
+      v-on-click-outside="[
+        () => $emit('close'),
+        { ignore: ['#panel-content-id'] }
+      ]"
+      id="panel-content-id"
+      class="fixed top-0 ltr:right-0 rtl:left-0 h-full z-40 w-full max-w-md bg-n-background ltr:border-l rtl:border-r border-n-weak shadow-lg"
+    >
+      <!-- Contenido del panel -->
+      <div class="overflow-y-auto h-full p-4">
+        <!-- Tu contenido aquí -->
+      </div>
+    </div>
+  </Transition>
+</template>
+
+<script>
+import { vOnClickOutside } from '@vueuse/components';
+
+export default {
+  directives: {
+    onClickOutside: vOnClickOutside,
+  },
+  props: {
+    isOpen: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  emits: ['close'],
+};
+</script>
+```
+
+**Elementos CRÍTICOS del patrón:**
+
+1. **`<Transition>` wrapper** con classes de enter/leave explícitas
+2. **`v-if="isOpen"` en el div interno**, NO en el Transition
+3. **`v-on-click-outside` con opción `ignore`** usando array syntax: `[handler, { ignore: ['#id'] }]`
+4. **`id` único en el contenedor** para referencia en la opción `ignore`
+5. **NO usar `:class="isOpen ? ..."`** en el elemento raíz (la animación la maneja Transition)
+
+**❌ ERRORES COMUNES - NUNCA HACER ESTO:**
+
+```vue
+<!-- ERROR #1: No usar Transition, usar :class directamente -->
+<div
+  v-on-click-outside="() => $emit('close')"
+  :class="isOpen ? 'translate-x-0' : 'translate-x-full'"
+>
+  <!-- Contenido -->
+</div>
+
+<!-- ERROR #2: v-on-click-outside sin opción ignore -->
+<div v-on-click-outside="() => $emit('close')">
+  <!-- El click del botón que abre el panel se propaga y lo cierra inmediatamente -->
+</div>
+
+<!-- ERROR #3: v-if en Transition en lugar del contenido -->
+<Transition v-if="isOpen">
+  <div>
+    <!-- Contenido -->
+  </div>
+</Transition>
+```
+
+**Por qué estos errores causan problemas:**
+
+1. **Sin `<Transition>`**: El click del botón que abre el panel se propaga al `v-on-click-outside` y cierra el panel inmediatamente (~300ms después de abrir). No hay sincronización correcta entre el estado y la animación.
+
+2. **Sin opción `ignore`**: Cualquier click, incluyendo el botón que abre el panel o clicks dentro del panel, disparan el evento de cierre.
+
+3. **`v-if` en lugar equivocado**: Vue no puede manejar correctamente el ciclo de vida del componente durante las transiciones.
+
+**Referencias de componentes que usan este patrón correctamente:**
+- `app/javascript/dashboard/routes/dashboard/contacts/components/ContactsDetailsLayout.vue` (líneas 144-178)
+- `app/javascript/dashboard/routes/dashboard/conversation/contact/ContactPanel.vue`
+- `app/javascript/dashboard/components/widgets/conversation/ConversationSidebar.vue`
+
+**Verificación Post-Implementación:**
+
+Antes de hacer el build, verificar que el panel:
+- [ ] Se abre con animación suave al hacer click en el botón
+- [ ] El contenido se muestra completamente sin desaparecer
+- [ ] Click dentro del panel NO lo cierra
+- [ ] Click fuera del panel SÍ lo cierra
+- [ ] El botón X cierra el panel con animación
+- [ ] Se puede abrir/cerrar múltiples veces sin problemas
+
 ---
 
 ## Sidebar Navigation
@@ -486,7 +621,11 @@ to: accountScopedRoute('example_wrapper'),
 
 ### 1. Crear archivos de traducción
 
-**`app/javascript/dashboard/i18n/locale/en/example.json`:**
+**⚠️ IMPORTANTE - NO incluir objeto SIDEBAR en archivos de módulo:**
+
+Las traducciones del SIDEBAR deben estar SOLO en `settings.json`, NUNCA en los archivos de módulo individual.
+
+**✅ CORRECTO - `app/javascript/dashboard/i18n/locale/en/example.json`:**
 ```json
 {
   "EXAMPLE": {
@@ -501,30 +640,44 @@ to: accountScopedRoute('example_wrapper'),
         "UPDATE": "Settings updated successfully"
       }
     }
+  }
+}
+```
+
+**❌ INCORRECTO - NO hacer esto:**
+```json
+{
+  "EXAMPLE": {
+    "HEADER": "Example Settings",
+    ...
   },
   "SIDEBAR": {
+    "EXAMPLE": "Example"  // ← NUNCA agregar SIDEBAR aquí
+  }
+}
+```
+
+**Por qué:** Cuando se hace spread de las traducciones en `index.js`, si múltiples archivos definen el objeto `SIDEBAR`, el último spread reemplaza completamente el objeto anterior, eliminando todas las traducciones del sidebar existentes. Esto rompe TODA la navegación del sidebar.
+
+**En su lugar, agregar traducciones de sidebar en `settings.json`:**
+
+**`app/javascript/dashboard/i18n/locale/en/settings.json` (línea ~382):**
+```json
+{
+  ...
+  "SIDEBAR": {
+    ...otras traducciones existentes...,
     "EXAMPLE": "Example"
   }
 }
 ```
 
-**`app/javascript/dashboard/i18n/locale/es/example.json`:**
+**`app/javascript/dashboard/i18n/locale/es/settings.json` (línea ~380):**
 ```json
 {
-  "EXAMPLE": {
-    "HEADER": "Configuración de Ejemplo",
-    "DESCRIPTION": "Administra tu configuración de ejemplo",
-    "API": {
-      "ERROR": {
-        "FETCH": "Error al cargar configuración",
-        "UPDATE": "Error al actualizar configuración"
-      },
-      "SUCCESS": {
-        "UPDATE": "Configuración actualizada exitosamente"
-      }
-    }
-  },
+  ...
   "SIDEBAR": {
+    ...otras traducciones existentes...,
     "EXAMPLE": "Ejemplo"
   }
 }
@@ -712,6 +865,37 @@ export default {
 };
 ```
 
+### 6.5. ❌ Todas las traducciones del sidebar se rompieron después de agregar nueva sección
+
+**Síntoma:** Después de agregar una nueva sección, todos los botones del sidebar muestran nombres de variables (ej: `SIDEBAR.SETTINGS`, `SIDEBAR.CONTACTS`) en lugar de los textos traducidos. Solo la nueva sección muestra el texto correcto.
+
+**Causa:** El archivo de traducción del nuevo módulo (`example.json`) define un objeto `SIDEBAR` que reemplaza completamente el objeto `SIDEBAR` de `settings.json` durante el spread.
+
+**Qué pasó:**
+```javascript
+// en/index.js
+export default {
+  ...settings,    // SIDEBAR con 50+ traducciones
+  ...example,     // SIDEBAR con solo 1 traducción - ¡REEMPLAZA el anterior!
+};
+```
+
+**Solución:**
+1. **ELIMINAR** el objeto `SIDEBAR` de `en/example.json` y `es/example.json`
+2. **AGREGAR** la traducción en `en/settings.json` y `es/settings.json`:
+
+```json
+// en/settings.json
+{
+  "SIDEBAR": {
+    ...todas las traducciones existentes...,
+    "EXAMPLE": "Example"  // ← Agregar aquí
+  }
+}
+```
+
+**Regla absoluta:** NUNCA definir objeto `SIDEBAR` en archivos de módulo individuales, SOLO en `settings.json`.
+
 ### 7. ❌ Layout roto o contenido cortado
 
 **Síntoma:** El contenido no se ve completo, hay scrolling extraño
@@ -749,6 +933,75 @@ def check_authorization
   raise Pundit::NotAuthorizedError unless Current.account_user.administrator?
 end
 ```
+
+### 9. ❌ Panel slide-in se abre y desaparece inmediatamente
+
+**Síntoma:** Al hacer click en un botón para abrir un panel lateral, el panel aparece brevemente (~300ms) y luego desaparece automáticamente. El contenido se ve por un momento pero no se puede interactuar con él.
+
+**Causa:** Event propagation del click del botón hacia el `v-on-click-outside` del panel. El patrón incorrecto con `:class` en lugar de `<Transition>` no maneja correctamente el ciclo de vida del componente.
+
+**Código problemático:**
+```vue
+<!-- ❌ INCORRECTO -->
+<div
+  v-on-click-outside="() => $emit('close')"
+  :class="isOpen ? 'translate-x-0' : 'translate-x-full'"
+  class="fixed ... transition-transform"
+>
+  <!-- contenido -->
+</div>
+```
+
+**Solución:**
+```vue
+<!-- ✅ CORRECTO -->
+<Transition
+  enter-active-class="transition-transform duration-300 ease-in-out"
+  enter-from-class="ltr:translate-x-full rtl:-translate-x-full"
+  enter-to-class="ltr:translate-x-0 rtl:-translate-x-0"
+  leave-active-class="transition-transform duration-300 ease-in-out"
+  leave-from-class="ltr:translate-x-0 rtl:-translate-x-0"
+  leave-to-class="ltr:translate-x-full rtl:-translate-x-full"
+>
+  <div
+    v-if="isOpen"
+    v-on-click-outside="[
+      () => $emit('close'),
+      { ignore: ['#panel-content-id'] }
+    ]"
+    id="panel-content-id"
+    class="fixed ..."
+  >
+    <!-- contenido -->
+  </div>
+</Transition>
+```
+
+**Cambios clave:**
+1. Envolver en `<Transition>` con enter/leave classes
+2. Mover `v-if="isOpen"` al div interno
+3. Agregar `id` único al contenedor
+4. Usar array syntax en `v-on-click-outside` con opción `ignore`
+5. Eliminar `:class="isOpen ? ..."` (ahora lo maneja Transition)
+
+Ver sección **"4. Paneles/Modals Slide-in"** arriba para el patrón completo.
+
+### 10. ❌ Error de sintaxis en build: "Element is missing end tag"
+
+**Síntoma:** El build de Vite falla con error como:
+```
+[vite:vue] app/javascript/.../Component.vue (10:5): Element is missing end tag.
+```
+
+**Causa:** Falta cerrar un `</div>` en el template Vue. Esto suele pasar cuando se refactoriza código y se agregan/quitan niveles de anidación.
+
+**Cómo debuggear:**
+1. Ir a la línea indicada en el error
+2. Contar todos los `<div>` que abren vs todos los `</div>` que cierran
+3. Verificar que cada apertura tenga su cierre correspondiente
+4. Prestar especial atención a divs con `v-if`, `v-for`, o condicionales
+
+**Tip:** Usar el auto-formatter del IDE (en VSCode: Shift+Alt+F) para identificar problemas de indentación que sugieren tags sin cerrar.
 
 ---
 

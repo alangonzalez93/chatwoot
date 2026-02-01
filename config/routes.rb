@@ -113,6 +113,7 @@ Rails.application.routes.draw do
               put :toggle
             end
           end
+          resources :properties, only: [:index, :show]
           namespace :channels do
             resource :twilio_channel, only: [:create]
           end

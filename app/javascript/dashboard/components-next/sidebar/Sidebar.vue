@@ -586,6 +586,13 @@ const menuItems = computed(() => {
       to: accountScopedRoute('miletobot_index'),
       activeOn: ['miletobot_wrapper', 'miletobot_index'],
     },
+    {
+      name: 'Properties',
+      label: t('SIDEBAR.PROPERTIES'),
+      icon: 'i-lucide-building-2',
+      to: accountScopedRoute('properties_index'),
+      activeOn: ['properties_wrapper', 'properties_index'],
+    },
   ];
 });
 </script>

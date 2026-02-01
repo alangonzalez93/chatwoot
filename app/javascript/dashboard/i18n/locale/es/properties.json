@@ -1,0 +1,63 @@
+{
+  "PROPERTIES": {
+    "HEADER": "Propiedades",
+    "DESCRIPTION": "Administra propiedades inmobiliarias y sus servicios",
+    "EMPTY_STATE": "No se encontraron propiedades",
+    "VIEW_DETAILS": "Ver detalles",
+    "TABLE": {
+      "INTERNAL_CODE": "Código",
+      "ADDRESS": "Dirección",
+      "CITY": "Ciudad",
+      "OWNER": "Propietario",
+      "TENANT": "Inquilino",
+      "STATUS": "Estado",
+      "ACTIONS": "Acciones"
+    },
+    "STATUS": {
+      "ACTIVE": "Activa",
+      "INACTIVE": "Inactiva"
+    },
+    "DETAIL": {
+      "TITLE": "Detalles de Propiedad",
+      "PROPERTY_INFO": "Información de Propiedad",
+      "OWNER_INFO": "Información de Propietario",
+      "TENANT_INFO": "Información de Inquilino",
+      "PROVINCE": "Provincia",
+      "NAME": "Nombre",
+      "ID_TYPE": "Tipo de ID",
+      "ID_VALUE": "Número de ID",
+      "IDENTIFIER": "Identificador",
+      "HOLDER": "Titular",
+      "PENDING_VOUCHERS": "Cupones Pendientes",
+      "NO_PENDING_VOUCHERS": "Sin cupones pendientes"
+    },
+    "VOUCHERS": {
+      "TABLE": {
+        "PERIOD": "Período",
+        "DUE_DATE": "Vencimiento",
+        "BASE_AMOUNT": "Monto Base",
+        "INTERESTS": "Intereses",
+        "DISCOUNTS": "Descuentos",
+        "TOTAL": "Total"
+      }
+    },
+    "IMPORT": {
+      "BUTTON": "Importar Propiedades",
+      "TITLE": "Importar Propiedades",
+      "DESCRIPTION": "Importa propiedades desde un archivo Excel (.xlsx).",
+      "LABEL": "Archivo Excel:",
+      "CHOOSE_FILE": "Elegir archivo",
+      "CHANGE": "Cambiar",
+      "SUCCESS": "Importación exitosa: {created} propiedades creadas, {updated} actualizadas, {services} servicios creados de {total} filas totales",
+      "ERROR": "Error al importar propiedades. Verifica el formato del archivo e intenta nuevamente.",
+      "FILE_REQUIRED": "Por favor selecciona un archivo para subir",
+      "INVALID_FILE_TYPE": "Solo se permiten archivos .xlsx"
+    },
+    "API": {
+      "ERROR": {
+        "FETCH": "Error al cargar propiedades",
+        "FETCH_DETAIL": "Error al cargar detalles de la propiedad"
+      }
+    }
+  }
+}

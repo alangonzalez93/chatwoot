@@ -39,6 +39,7 @@ import whatsappTemplates from './whatsappTemplates.json';
 import contentTemplates from './contentTemplates.json';
 import mfa from './mfa.json';
 import miletoBot from './miletoBot.json';
+import properties from './properties.json';
 
 export default {
   ...advancedFilters,
@@ -82,4 +83,5 @@ export default {
   ...contentTemplates,
   ...mfa,
   ...miletoBot,
+  ...properties,
 };

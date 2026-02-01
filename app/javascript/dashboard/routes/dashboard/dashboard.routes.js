@@ -10,6 +10,7 @@ import helpcenterRoutes from './helpcenter/helpcenter.routes';
 import campaignsRoutes from './campaigns/campaigns.routes';
 import { routes as captainRoutes } from './captain/captain.routes';
 import miletobotRoutes from './miletobot/miletobot.routes';
+import propertiesRoutes from './properties/properties.routes';
 import AppContainer from './Dashboard.vue';
 import Suspended from './suspended/Index.vue';
 import NoAccounts from './noAccounts/Index.vue';
@@ -31,6 +32,7 @@ export default {
         ...helpcenterRoutes.routes,
         ...campaignsRoutes.routes,
         ...miletobotRoutes.routes,
+        ...propertiesRoutes.routes,
       ],
     },
     {

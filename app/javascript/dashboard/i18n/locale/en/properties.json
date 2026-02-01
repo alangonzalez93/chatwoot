@@ -1,0 +1,63 @@
+{
+  "PROPERTIES": {
+    "HEADER": "Properties",
+    "DESCRIPTION": "Manage real estate properties and their services",
+    "EMPTY_STATE": "No properties found",
+    "VIEW_DETAILS": "View details",
+    "TABLE": {
+      "INTERNAL_CODE": "Code",
+      "ADDRESS": "Address",
+      "CITY": "City",
+      "OWNER": "Owner",
+      "TENANT": "Tenant",
+      "STATUS": "Status",
+      "ACTIONS": "Actions"
+    },
+    "STATUS": {
+      "ACTIVE": "Active",
+      "INACTIVE": "Inactive"
+    },
+    "DETAIL": {
+      "TITLE": "Property Details",
+      "PROPERTY_INFO": "Property Information",
+      "OWNER_INFO": "Owner Information",
+      "TENANT_INFO": "Tenant Information",
+      "PROVINCE": "Province",
+      "NAME": "Name",
+      "ID_TYPE": "ID Type",
+      "ID_VALUE": "ID Number",
+      "IDENTIFIER": "Identifier",
+      "HOLDER": "Holder",
+      "PENDING_VOUCHERS": "Pending Vouchers",
+      "NO_PENDING_VOUCHERS": "No pending vouchers"
+    },
+    "VOUCHERS": {
+      "TABLE": {
+        "PERIOD": "Period",
+        "DUE_DATE": "Due Date",
+        "BASE_AMOUNT": "Base Amount",
+        "INTERESTS": "Interests",
+        "DISCOUNTS": "Discounts",
+        "TOTAL": "Total"
+      }
+    },
+    "IMPORT": {
+      "BUTTON": "Import Properties",
+      "TITLE": "Import Properties",
+      "DESCRIPTION": "Import properties from an Excel file (.xlsx).",
+      "LABEL": "Excel File:",
+      "CHOOSE_FILE": "Choose file",
+      "CHANGE": "Change",
+      "SUCCESS": "Import successful: {created} properties created, {updated} updated, {services} services created from {total} total rows",
+      "ERROR": "Failed to import properties. Please check the file format and try again.",
+      "FILE_REQUIRED": "Please select a file to upload",
+      "INVALID_FILE_TYPE": "Only .xlsx files are allowed"
+    },
+    "API": {
+      "ERROR": {
+        "FETCH": "Failed to load properties",
+        "FETCH_DETAIL": "Failed to load property details"
+      }
+    }
+  }
+}

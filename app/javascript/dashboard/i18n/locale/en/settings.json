@@ -378,7 +378,8 @@
     },
     "DOCS": "Read docs",
     "SECURITY": "Security",
-    "MILETO_BOT": "Mileto Bot"
+    "MILETO_BOT": "Mileto Bot",
+    "PROPERTIES": "Properties"
   },
   "BILLING_SETTINGS": {
     "TITLE": "Billing",

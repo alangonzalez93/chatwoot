@@ -17,19 +17,55 @@
       "ACTIVE": "Active",
       "INACTIVE": "Inactive"
     },
+    "RENTAL_STATUS": {
+      "PENDIENTE": "Pending",
+      "EN_ALQUILER": "For Rent",
+      "EN_VENTA": "For Sale",
+      "EN_ALQUILER_Y_VENTA": "For Rent & Sale",
+      "VENDIDA": "Sold",
+      "ALQUILADA": "Rented",
+      "UNKNOWN": "No status"
+    },
     "DETAIL": {
       "TITLE": "Property Details",
       "PROPERTY_INFO": "Property Information",
       "OWNER_INFO": "Owner Information",
       "TENANT_INFO": "Tenant Information",
+      "CONTRACT_INFO": "Contract Information",
       "PROVINCE": "Province",
       "NAME": "Name",
+      "NAME_FULL": "Full Name",
+      "FIRST_NAME": "First Name",
+      "LAST_NAME": "Last Name",
       "ID_TYPE": "ID Type",
       "ID_VALUE": "ID Number",
+      "EMAIL": "Email",
+      "PHONE": "Phone",
       "IDENTIFIER": "Identifier",
       "HOLDER": "Holder",
       "PENDING_VOUCHERS": "Pending Vouchers",
-      "NO_PENDING_VOUCHERS": "No pending vouchers"
+      "NO_PENDING_VOUCHERS": "No pending vouchers",
+      "PROPERTY_NAME": "Property Name",
+      "ZONE": "Zone",
+      "PROPERTY_UNIT": "Unit",
+      "BUILDING_NAME": "Building",
+      "NOTES": "Notes",
+      "RENTAL_STATUS": "Rental Status",
+      "LISTED": "Listed",
+      "RENT_AMOUNT": "Rent Amount",
+      "RENT_AMOUNT_WORDS": "Rent Amount in Words",
+      "PAYMENT_DUE_DAY": "Payment Due Day",
+      "CONTRACT_START": "Contract Start",
+      "CONTRACT_RENEWAL": "Contract Renewal",
+      "CONTRACT_END": "Contract End",
+      "EXPENSES": "Expenses",
+      "MANAGEMENT_FEE": "Management Fee %",
+      "EDIT": "Edit",
+      "SAVE": "Save",
+      "CANCEL": "Cancel",
+      "SAVE_SUCCESS": "Property updated successfully",
+      "SAVE_ERROR": "Failed to update property",
+      "NO_CHANGES": "No changes to save"
     },
     "VOUCHERS": {
       "TABLE": {
@@ -53,11 +89,69 @@
       "FILE_REQUIRED": "Please select a file to upload",
       "INVALID_FILE_TYPE": "Only .xlsx files are allowed"
     },
+    "EXPORT": {
+      "BUTTON": "Download Report",
+      "GENERATING": "Generating file...",
+      "ERROR": "Failed to export. Please try again.",
+      "DIALOG": {
+        "TITLE": "Download Receipts & Settlements",
+        "DESCRIPTION": "Select the period to generate the report",
+        "MONTH": "Month",
+        "YEAR": "Year",
+        "CONFIRM": "Download"
+      },
+      "MONTHS": {
+        "1": "January",
+        "2": "February",
+        "3": "March",
+        "4": "April",
+        "5": "May",
+        "6": "June",
+        "7": "July",
+        "8": "August",
+        "9": "September",
+        "10": "October",
+        "11": "November",
+        "12": "December"
+      }
+    },
+    "SYNC": {
+      "BUTTON": "Update Taxes",
+      "SUCCESS": "Tax data updated successfully.",
+      "ERROR": "Failed to update tax data. Please try again.",
+      "DIALOG": {
+        "TITLE": "Update Tax Data",
+        "DESCRIPTION": "This will sync the latest tax information from the external service. The process may take a few minutes.",
+        "CONFIRM": "Update"
+      }
+    },
+    "ANNUAL_PAYMENT": {
+      "BUTTON": "Register annual payment",
+      "DIALOG": {
+        "TITLE": "Register Annual Payment",
+        "DESCRIPTION": "Register the annual payment for service {serviceType}",
+        "AMOUNT": "Total amount",
+        "YEAR": "Year",
+        "CONFIRM": "Register Payment"
+      },
+      "SUCCESS": "Annual payment registered successfully",
+      "ERROR": "Failed to register annual payment",
+      "VALIDATION": {
+        "AMOUNT_REQUIRED": "Amount is required",
+        "YEAR_REQUIRED": "Year is required"
+      }
+    },
     "API": {
       "ERROR": {
         "FETCH": "Failed to load properties",
         "FETCH_DETAIL": "Failed to load property details"
       }
+    },
+    "SEARCH": {
+      "PLACEHOLDER": "Search properties...",
+      "BUTTON": "Search",
+      "CLEAR": "Clear",
+      "ALL_STATUS": "All statuses"
     }
   }
 }

@@ -17,19 +17,55 @@
       "ACTIVE": "Activa",
       "INACTIVE": "Inactiva"
     },
+    "RENTAL_STATUS": {
+      "PENDIENTE": "Pendiente",
+      "EN_ALQUILER": "En Alquiler",
+      "EN_VENTA": "En Venta",
+      "EN_ALQUILER_Y_VENTA": "En Alquiler y Venta",
+      "VENDIDA": "Vendida",
+      "ALQUILADA": "Alquilada",
+      "UNKNOWN": "Sin estado"
+    },
     "DETAIL": {
       "TITLE": "Detalles de Propiedad",
       "PROPERTY_INFO": "Información de Propiedad",
       "OWNER_INFO": "Información de Propietario",
       "TENANT_INFO": "Información de Inquilino",
+      "CONTRACT_INFO": "Información de Contrato",
       "PROVINCE": "Provincia",
       "NAME": "Nombre",
+      "NAME_FULL": "Nombre Completo",
+      "FIRST_NAME": "Nombre",
+      "LAST_NAME": "Apellido",
       "ID_TYPE": "Tipo de ID",
       "ID_VALUE": "Número de ID",
+      "EMAIL": "Email",
+      "PHONE": "Teléfono",
       "IDENTIFIER": "Identificador",
       "HOLDER": "Titular",
       "PENDING_VOUCHERS": "Cupones Pendientes",
-      "NO_PENDING_VOUCHERS": "Sin cupones pendientes"
+      "NO_PENDING_VOUCHERS": "Sin cupones pendientes",
+      "PROPERTY_NAME": "Nombre de Propiedad",
+      "ZONE": "Zona",
+      "PROPERTY_UNIT": "Unidad",
+      "BUILDING_NAME": "Edificio",
+      "NOTES": "Notas",
+      "RENTAL_STATUS": "Estado de Alquiler",
+      "LISTED": "Publicada",
+      "RENT_AMOUNT": "Monto de Alquiler",
+      "RENT_AMOUNT_WORDS": "Monto en Letras",
+      "PAYMENT_DUE_DAY": "Día de Vencimiento",
+      "CONTRACT_START": "Inicio de Contrato",
+      "CONTRACT_RENEWAL": "Renovación de Contrato",
+      "CONTRACT_END": "Fin de Contrato",
+      "EXPENSES": "Expensas",
+      "MANAGEMENT_FEE": "Comisión de Administración %",
+      "EDIT": "Editar",
+      "SAVE": "Guardar",
+      "CANCEL": "Cancelar",
+      "SAVE_SUCCESS": "Propiedad actualizada correctamente",
+      "SAVE_ERROR": "Error al actualizar la propiedad",
+      "NO_CHANGES": "No hay cambios para guardar"
     },
     "VOUCHERS": {
       "TABLE": {
@@ -53,11 +89,69 @@
       "FILE_REQUIRED": "Por favor selecciona un archivo para subir",
       "INVALID_FILE_TYPE": "Solo se permiten archivos .xlsx"
     },
+    "EXPORT": {
+      "BUTTON": "Descargar Reporte",
+      "GENERATING": "Generando archivo...",
+      "ERROR": "Error al exportar. Intenta nuevamente.",
+      "DIALOG": {
+        "TITLE": "Descargar Recibos y Liquidaciones",
+        "DESCRIPTION": "Selecciona el período para generar el reporte",
+        "MONTH": "Mes",
+        "YEAR": "Año",
+        "CONFIRM": "Descargar"
+      },
+      "MONTHS": {
+        "1": "Enero",
+        "2": "Febrero",
+        "3": "Marzo",
+        "4": "Abril",
+        "5": "Mayo",
+        "6": "Junio",
+        "7": "Julio",
+        "8": "Agosto",
+        "9": "Septiembre",
+        "10": "Octubre",
+        "11": "Noviembre",
+        "12": "Diciembre"
+      }
+    },
+    "SYNC": {
+      "BUTTON": "Actualizar Impuestos",
+      "SUCCESS": "Datos de impuestos actualizados correctamente.",
+      "ERROR": "Error al actualizar datos de impuestos. Intenta nuevamente.",
+      "DIALOG": {
+        "TITLE": "Actualizar Datos de Impuestos",
+        "DESCRIPTION": "Esto sincronizará la información de impuestos más reciente desde el servicio externo. El proceso puede tardar unos minutos.",
+        "CONFIRM": "Actualizar"
+      }
+    },
+    "ANNUAL_PAYMENT": {
+      "BUTTON": "Cargar pago anual",
+      "DIALOG": {
+        "TITLE": "Cargar Pago Anual",
+        "DESCRIPTION": "Registrar el pago anual del servicio {serviceType}",
+        "AMOUNT": "Monto total",
+        "YEAR": "Año",
+        "CONFIRM": "Registrar Pago"
+      },
+      "SUCCESS": "Pago anual registrado correctamente",
+      "ERROR": "Error al registrar el pago anual",
+      "VALIDATION": {
+        "AMOUNT_REQUIRED": "El monto es requerido",
+        "YEAR_REQUIRED": "El año es requerido"
+      }
+    },
     "API": {
       "ERROR": {
         "FETCH": "Error al cargar propiedades",
         "FETCH_DETAIL": "Error al cargar detalles de la propiedad"
       }
+    },
+    "SEARCH": {
+      "PLACEHOLDER": "Buscar propiedades...",
+      "BUTTON": "Buscar",
+      "CLEAR": "Limpiar",
+      "ALL_STATUS": "Todos los estados"
     }
   }
 }

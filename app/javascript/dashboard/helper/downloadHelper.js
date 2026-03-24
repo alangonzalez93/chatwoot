@@ -13,6 +13,14 @@ export const downloadCsvFile = (fileName, content) => {
   return link;
 };
 
+export const downloadBinaryFile = (fileName, blob) => {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.setAttribute('download', fileName);
+  link.setAttribute('href', url);
+  link.click();
+};
+
 export const generateFileName = ({ type, to, businessHours = false }) => {
   let name = `${type}-report-${format(fromUnixTime(to), 'dd-MM-yyyy')}`;
   if (businessHours) {

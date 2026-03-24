@@ -124,8 +124,13 @@ const newReportRoutes = () => [
 
 const reportRoutes = computed(() => newReportRoutes());
 
+const hiddenItems = computed(() => {
+  const raw = window.chatwootConfig?.hiddenSidebarItems || '';
+  return raw.split(',').map(s => s.trim()).filter(Boolean);
+});
+
 const menuItems = computed(() => {
-  return [
+  const items = [
     {
       name: 'Inbox',
       label: t('SIDEBAR.INBOX'),
@@ -594,6 +599,7 @@ const menuItems = computed(() => {
       activeOn: ['properties_wrapper', 'properties_index'],
     },
   ];
+  return items.filter(item => !hiddenItems.value.includes(item.name));
 });
 </script>
 

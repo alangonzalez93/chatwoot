@@ -47,6 +47,9 @@
         isEnterprise: '<%= @global_config['IS_ENTERPRISE'] %>',
         isMfaEnabled: '<%= Chatwoot.mfa_enabled? %>',
         miletoApiKey: '<%= ENV.fetch('MILETO_API_KEY', '') %>',
+        miletoAdminFirstName: '<%= ENV.fetch('MILETO_ADMIN_FIRST_NAME', '') %>',
+        miletoAdminLastName: '<%= ENV.fetch('MILETO_ADMIN_LAST_NAME', '') %>',
+        hiddenSidebarItems: '<%= ENV.fetch('HIDDEN_SIDEBAR_ITEMS', '') %>',
         <% if @global_config['IS_ENTERPRISE'] %>
         enterprisePlanName: '<%= @global_config['INSTALLATION_PRICING_PLAN'] %>',
         <% end %>

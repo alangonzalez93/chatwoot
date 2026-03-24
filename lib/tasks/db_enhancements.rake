@@ -3,6 +3,14 @@ Rake::Task['db:migrate'].enhance do
   if ActiveRecord::Base.connection.table_exists? 'installation_configs'
     puts 'Loading Installation config'
     ConfigLoader.new.process
+    # Force Mileto branding after config load
+    %w[INSTALLATION_NAME BRAND_NAME].each do |key|
+      config = InstallationConfig.find_or_initialize_by(name: key)
+      config.value = 'Mileto'
+      config.locked = true
+      config.save!
+    end
+    GlobalConfig.clear_cache
   end
 end
 

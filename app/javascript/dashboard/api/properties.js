@@ -108,10 +108,27 @@ class PropertiesAPI extends ApiClient {
       throw new Error('Mileto API key is not configured. Please contact administrator.');
     }
 
-    return axios.post('https://api.mileto.ai/api/scraper/sync/2', null, {
+    return axios.post('https://api.mileto.ai/api/scraper/sync', null, {
       headers: { 'x-api-key': apiKey },
     });
   }
+
+  /**
+   * Get scraper status
+   * @returns {Promise} Promise with { status, lastCompletedAt, lastSuccessAt }
+   */
+  getScraperStatus() {
+    const apiKey = window.chatwootConfig?.miletoApiKey;
+
+    if (!apiKey) {
+      throw new Error('Mileto API key is not configured. Please contact administrator.');
+    }
+
+    return axios.get('https://api.mileto.ai/api/scraper/status', {
+      headers: { 'x-api-key': apiKey },
+    });
+  }
+
   /**
    * Register annual payment for a service
    * @param {number} propertyId - Property ID

@@ -118,7 +118,11 @@
     "SYNC": {
       "BUTTON": "Actualizar Impuestos",
       "SUCCESS": "Datos de impuestos actualizados correctamente.",
-      "ERROR": "Error al actualizar datos de impuestos. Intenta nuevamente.",
+      "ERROR": "Error al actualizar datos de impuestos.",
+      "STARTED": "Sincronización iniciada. Se te notificará cuando termine.",
+      "IN_PROGRESS": "Sincronización de impuestos en curso...",
+      "LAST_SUCCESS": "Última actualización exitosa: {date}",
+      "LAST_RUN": "Última ejecución: {date}",
       "DIALOG": {
         "TITLE": "Actualizar Datos de Impuestos",
         "DESCRIPTION": "Esto sincronizará la información de impuestos más reciente desde el servicio externo. El proceso puede tardar unos minutos.",

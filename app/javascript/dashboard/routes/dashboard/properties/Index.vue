@@ -71,6 +71,15 @@
         />
       </div>
 
+      <!-- Sync In Progress Banner -->
+      <div
+        v-if="syncStatus === 'RUNNING'"
+        class="mb-4 flex items-center gap-2 px-4 py-3 bg-n-amber-3 text-n-amber-11 rounded-lg text-sm"
+      >
+        <spinner size="small" />
+        {{ $t('PROPERTIES.SYNC.IN_PROGRESS') }}
+      </div>
+
       <!-- Loading State -->
       <div v-if="uiFlags.isFetching" class="flex justify-center items-center py-12">
         <spinner size="large" />
@@ -185,11 +194,29 @@
     <Dialog
       ref="syncDialogRef"
       :title="$t('PROPERTIES.SYNC.DIALOG.TITLE')"
-      :description="$t('PROPERTIES.SYNC.DIALOG.DESCRIPTION')"
       :confirm-button-label="$t('PROPERTIES.SYNC.DIALOG.CONFIRM')"
       :is-loading="isSyncing"
+      :disable-confirm-button="syncStatus === 'RUNNING'"
       @confirm="handleSync"
-    />
+    >
+      <div class="mt-2 space-y-3">
+        <p v-if="syncStatus === 'RUNNING'" class="flex items-center gap-2 text-sm text-n-amber-11">
+          <spinner size="small" />
+          {{ $t('PROPERTIES.SYNC.IN_PROGRESS') }}
+        </p>
+        <p v-else class="text-sm text-n-slate-11">
+          {{ $t('PROPERTIES.SYNC.DIALOG.DESCRIPTION') }}
+        </p>
+        <div v-if="lastSyncSuccessAt || lastSyncCompletedAt" class="text-xs text-n-slate-10 space-y-1">
+          <p v-if="lastSyncSuccessAt">
+            {{ $t('PROPERTIES.SYNC.LAST_SUCCESS', { date: formatSyncDate(lastSyncSuccessAt) }) }}
+          </p>
+          <p v-if="lastSyncCompletedAt && lastSyncCompletedAt !== lastSyncSuccessAt">
+            {{ $t('PROPERTIES.SYNC.LAST_RUN', { date: formatSyncDate(lastSyncCompletedAt) }) }}
+          </p>
+        </div>
+      </div>
+    </Dialog>
 
     <!-- Export Dialog -->
     <Dialog
@@ -262,6 +289,10 @@ export default {
       isPanelOpen: false,
       isExporting: false,
       isSyncing: false,
+      syncStatus: 'IDLE',
+      lastSyncCompletedAt: null,
+      lastSyncSuccessAt: null,
+      syncPollingInterval: null,
       exportMonth: new Date().getMonth() + 1,
       exportYear: new Date().getFullYear(),
       searchQuery: '',
@@ -300,6 +331,10 @@ export default {
   },
   mounted() {
     this.fetchProperties();
+    this.fetchScraperStatus();
+  },
+  beforeUnmount() {
+    this.stopPolling();
   },
   methods: {
     async fetchProperties(page = 0) {
@@ -420,9 +455,11 @@ export default {
     async handleSync() {
       this.isSyncing = true;
       try {
-        await propertiesAPI.syncTaxes();
+        propertiesAPI.syncTaxes();
+        this.syncStatus = 'RUNNING';
         this.$refs.syncDialogRef.close();
-        useAlert(this.$t('PROPERTIES.SYNC.SUCCESS'));
+        useAlert(this.$t('PROPERTIES.SYNC.STARTED'));
+        this.startPolling();
       } catch (error) {
         this.$refs.syncDialogRef.close();
         const errorMsg = error.response?.data?.message ||
@@ -432,6 +469,56 @@ export default {
       } finally {
         this.isSyncing = false;
       }
+    },
+
+    async fetchScraperStatus() {
+      try {
+        const { data } = await propertiesAPI.getScraperStatus();
+        this.syncStatus = data.status;
+        this.lastSyncCompletedAt = data.lastCompletedAt;
+        this.lastSyncSuccessAt = data.lastSuccessAt;
+        if (data.status === 'RUNNING') {
+          this.startPolling();
+        }
+      } catch {
+        // silenciar — el endpoint puede no existir aún
+      }
+    },
+
+    startPolling() {
+      this.stopPolling();
+      this.syncPollingInterval = setInterval(() => this.pollScraperStatus(), 60000);
+    },
+
+    async pollScraperStatus() {
+      try {
+        const { data } = await propertiesAPI.getScraperStatus();
+        const wasRunning = this.syncStatus === 'RUNNING';
+        this.syncStatus = data.status;
+        this.lastSyncCompletedAt = data.lastCompletedAt;
+        this.lastSyncSuccessAt = data.lastSuccessAt;
+        if (wasRunning && (data.status === 'COMPLETED' || data.status === 'FAILED')) {
+          this.stopPolling();
+          useAlert(data.status === 'COMPLETED'
+            ? this.$t('PROPERTIES.SYNC.SUCCESS')
+            : this.$t('PROPERTIES.SYNC.ERROR'));
+        }
+      } catch {
+        // silenciar errores de polling
+      }
+    },
+
+    stopPolling() {
+      if (this.syncPollingInterval) {
+        clearInterval(this.syncPollingInterval);
+        this.syncPollingInterval = null;
+      }
+    },
+
+    formatSyncDate(dateStr) {
+      if (!dateStr) return '-';
+      const date = new Date(dateStr);
+      return date.toLocaleString();
     },
 
     openImportDialog() {

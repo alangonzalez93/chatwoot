@@ -118,7 +118,11 @@
     "SYNC": {
       "BUTTON": "Update Taxes",
       "SUCCESS": "Tax data updated successfully.",
-      "ERROR": "Failed to update tax data. Please try again.",
+      "ERROR": "Failed to update tax data.",
+      "STARTED": "Synchronization started. You'll be notified when it completes.",
+      "IN_PROGRESS": "Tax synchronization in progress...",
+      "LAST_SUCCESS": "Last successful update: {date}",
+      "LAST_RUN": "Last run: {date}",
       "DIALOG": {
         "TITLE": "Update Tax Data",
         "DESCRIPTION": "This will sync the latest tax information from the external service. The process may take a few minutes.",
